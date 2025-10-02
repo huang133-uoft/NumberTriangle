@@ -121,20 +121,19 @@ public class NumberTriangle {
         if (inputStream == null) throw new IOException("Resource not found: " + fname);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
         List<List<NumberTriangle>> rows = new ArrayList<>();
-        String line = br.readLine();
+
+        String line;
         while ((line = br.readLine()) != null) {
             line = line.trim();
             if (!line.isEmpty()) {
                 String[] parts = line.split("\\s+");
-                List<NumberTriangle> row = new ArrayList<>(parts.length);
+                List<NumberTriangle> row = new ArrayList<>();
                 for (String part : parts) {
                     row.add(new NumberTriangle(Integer.parseInt(part)));
                 }
                 rows.add(row);
             }
-            line = br.readLine();
         }
         br.close();
 
@@ -144,7 +143,7 @@ public class NumberTriangle {
             List<NumberTriangle> cur = rows.get(i);
             List<NumberTriangle> next = rows.get(i + 1);
             for (int j = 0; j < cur.size(); j++) {
-                cur.get(j).setLeft(cur.get(j));
+                cur.get(j).setLeft(next.get(j));
                 cur.get(j).setRight(next.get(j + 1));
             }
         }
