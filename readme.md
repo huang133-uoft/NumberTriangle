@@ -1,4 +1,4 @@
-# Module 1 Individual Coding Task
+ # Module 1 Individual Coding Task
 
 This coding task is based on Problem 18 from Project Euler (https://projecteuler.net/problem=18).
 
