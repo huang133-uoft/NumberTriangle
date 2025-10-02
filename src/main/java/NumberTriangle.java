@@ -116,6 +116,11 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) {
+            try { inputStream = new java.io.FileInputStream(fname); }
+            catch (java.io.FileNotFoundException e) { throw new IOException(e); }
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
