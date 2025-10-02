@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -90,19 +91,16 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         NumberTriangle cur = this;
-        for (int i = 0; i < path.length(); i++) {
-            char c = path.charAt(i);
+        for (char c : path.toCharArray()) {
             if (c == 'l') {
-                if (cur.left == null) throw new IllegalArgumentException("Path goes past a leaf at index " + i);
                 cur = cur.left;
             } else if (c == 'r') {
-                if (cur.right == null) throw new IllegalArgumentException("Path goes past a leaf at index " + i);
                 cur = cur.right;
             } else {
-                throw new IllegalArgumentException("Path must contain only 'l' or 'r'");
+                return -1;
             }
         }
-        return cur.root;
+        return cur.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -120,36 +118,41 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        if (inputStream == null) inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        if (inputStream == null) {
-            try { inputStream = new java.io.FileInputStream(fname); }
-            catch (java.io.FileNotFoundException e) { throw new IOException(e); }
-        }
+        if (inputStream == null) throw new IOException("Resource not found: " + fname);
+
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        java.util.List<java.util.List<Integer>> list = new java.util.ArrayList<>();
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
+        List<List<NumberTriangle>> rows = new ArrayList<>();
         String line = br.readLine();
-        while (line != null) {
+        while ((line = br.readLine()) != null) {
             line = line.trim();
             if (!line.isEmpty()) {
                 String[] parts = line.split("\\s+");
-                java.util.List<Integer> row = new java.util.ArrayList<>(parts.length);
-                for (String part : parts) row.add(Integer.parseInt(part));
-                list.add(row);
+                List<NumberTriangle> row = new ArrayList<>(parts.length);
+                for (String part : parts) {
+                    row.add(new NumberTriangle(Integer.parseInt(part)));
+                }
+                rows.add(row);
             }
-
-            //read the next line
             line = br.readLine();
         }
         br.close();
-        return top;
+
+        if (rows.isEmpty()) throw new IOException("Empty triangle");
+
+        for (int i = 0; i < rows.size() - 1; i++) {
+            List<NumberTriangle> cur = rows.get(i);
+            List<NumberTriangle> next = rows.get(i + 1);
+            for (int j = 0; j < cur.size(); j++) {
+                cur.get(j).setLeft(cur.get(j));
+                cur.get(j).setRight(next.get(j + 1));
+            }
+        }
+        return rows.get(0).get(0);
+
+
     }
+
 
     public static void main(String[] args) throws IOException {
 
