@@ -89,7 +89,7 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        NumberTriangle triangle = this;
+        NumberTriangle triangle = new NumberTriangle(root);
         for (int i = 0; i < path.length(); i++) {
             char ch = path.charAt(i);
             if (ch == 'l') {
