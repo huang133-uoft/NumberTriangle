@@ -89,16 +89,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        NumberTriangle triangle = this;
+        NumberTriangle cur = this;
         for (int i = 0; i < path.length(); i++) {
-            char ch = path.charAt(i);
-            if (ch == 'l') {
-                setLeft(triangle);
-            } else if (ch == 'r') {
-                setRight(triangle);
+            char c = path.charAt(i);
+            if (c == 'l') {
+                if (cur.left == null) throw new IllegalArgumentException("Path goes past a leaf at index " + i);
+                cur = cur.left;
+            } else if (c == 'r') {
+                if (cur.right == null) throw new IllegalArgumentException("Path goes past a leaf at index " + i);
+                cur = cur.right;
+            } else {
+                throw new IllegalArgumentException("Path must contain only 'l' or 'r'");
             }
         }
-        return triangle.root;
+        return cur.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
