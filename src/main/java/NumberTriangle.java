@@ -118,7 +118,6 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        if (inputStream == null) throw new IOException("Resource not found: " + fname);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         List<List<NumberTriangle>> rows = new ArrayList<>();
@@ -136,6 +135,7 @@ public class NumberTriangle {
             }
         }
         br.close();
+        NumberTriangle top = null;
 
         if (rows.isEmpty()) throw new IOException("Empty triangle");
 
@@ -147,8 +147,8 @@ public class NumberTriangle {
                 cur.get(j).setRight(next.get(j + 1));
             }
         }
-        return rows.get(0).get(0);
-
+        top = rows.get(0).get(0);
+        return top;
 
     }
 
